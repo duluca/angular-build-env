@@ -1,0 +1,40 @@
+{
+  "name": "angular-build-env",
+  "version": "1.4.3",
+  "description": "Angular CLI and Docker multi-stage compatible Alpine Node Build Environment",
+  "config": {
+    "imageRepo": "duluca/angular4-material2-starter",
+    "imageName": "a4m2"
+  },
+  "scripts": {
+    "docker:build": "cross-conf-env docker image build . -t $npm_package_config_imageRepo:$npm_package_version",
+    "postdocker:build": "npm run docker:tag",
+    "docker:tag": " cross-conf-env docker image tag $npm_package_config_imageRepo:$npm_package_version $npm_package_config_imageRepo:latest",
+    "docker:run": "run-s -c docker:clean docker:runHelper",
+    "docker:runHelper": "cross-conf-env docker run -e NODE_ENV=local --name $npm_package_config_imageName -d -p $npm_package_config_imagePort:3000 $npm_package_config_imageRepo",
+    "predocker:publish": "echo Attention! Ensure `docker login` is correct.",
+    "docker:publish": "cross-conf-env docker image push $npm_package_config_imageRepo:latest",
+    "docker:clean": "cross-conf-env docker rm -f $npm_package_config_imageName"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duluca/angular-build-env.git"
+  },
+  "keywords": [
+    "Angular",
+    "CLI",
+    "Docker",
+    "Alpine",
+    "Node"
+  ],
+  "author": "duluca@gmail.com",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/duluca/angular-build-env/issues"
+  },
+  "homepage": "https://github.com/duluca/angular-build-env#readme",
+  "devDependencies": {
+    "cross-conf-env": "^1.1.2",
+    "npm-run-all": "^4.1.1"
+  }
+}
